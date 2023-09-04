@@ -2,10 +2,11 @@
 //  AppDelegate.swift
 //  task2_app
 //
-//  Created by Kasım Sağır on 30.08.2023.
+//  Created by Recep Uyduran on 30.08.2023.
 //
 
 import UIKit
+import MediaPlayer
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let current = UNUserNotificationCenter.current()
+        current.delegate = self
+        current.requestAuthorization(options: [.badge, .alert, .sound], completionHandler: { granted, error in
+            if granted {
+                print("Notification authorization granted")
+            }
+            else {
+                print("Notification authorization denied")
+            }
+        })
         return true
     }
 
@@ -33,4 +44,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
+
+extension AppDelegate:UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.sound, .badge, .banner])
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+}
+
 
